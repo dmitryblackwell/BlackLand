@@ -10,6 +10,7 @@ import java.util.LinkedList;
 public class Handler implements Iterable<GameObject> {
     private LinkedList<GameObject> objects = new LinkedList<>();
     private ArrayList<GameObject> toDelete = new ArrayList<>();
+    private ArrayList<GameObject> toAdd = new ArrayList<>();
 
     public synchronized void tick(){
         Player p = getPlayer();
@@ -62,6 +63,16 @@ public class Handler implements Iterable<GameObject> {
                     }
                 }
 
+
+                if(o.getId() == ID.Bomb && o.intersects(object.getBounds())){
+                    toDelete.add(o);
+                    if (object.getId() == ID.BasicEnemy)
+                        toDelete.add(object);
+                    else if (object.getId() == ID.Player)
+                        getPlayer().bombCollision();
+
+                }
+
                 if(object.getId() == ID.Bullet && object.intersects(o.getBounds())){
                     if(o.getId() == ID.BasicEnemy)
                         toDelete.add(o);
@@ -74,6 +85,10 @@ public class Handler implements Iterable<GameObject> {
 
         for(GameObject object : toDelete)
             objects.remove(object);
+        for(GameObject object : toAdd)
+            objects.add(object);
+
+        toAdd.clear();
         toDelete.clear();
     }
 
@@ -88,10 +103,10 @@ public class Handler implements Iterable<GameObject> {
     }
 
     public void add(GameObject object){
-        objects.add(object);
+        toAdd.add(object);
     }
     public void remove(GameObject object){
-        objects.remove(object);
+        toDelete.add(object);
     }
 
     public Player getPlayer() {

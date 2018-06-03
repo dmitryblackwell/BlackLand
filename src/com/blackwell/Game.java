@@ -2,6 +2,7 @@ package com.blackwell;
 
 import com.blackwell.entity.*;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
 import java.util.Random;
@@ -28,15 +29,15 @@ public class Game extends Canvas implements Runnable {
         handler.add(new Player(WIDTH/2,HEIGHT/2,ID.Player));
 
         Random R = new Random();
-        for(int i=0; i<40; ++i)
-            handler.add(new BasicEnemy((i+2)*32,100, ID.BasicEnemy));
+        for(int i=0; i<60; ++i)
+            handler.add(new BasicEnemy(i*32,100, ID.BasicEnemy));
 
         for(int i=0; i<40; ++i)
             for(int j=0; j<64; ++j)
                 if (R.nextInt(4) == 0)
                     handler.add(new Block((j + R.nextInt(20)-10)*Block.SIZE, i*Block.SIZE, ID.Block));
 
-        for(int i=0; i<5; ++i)
+        for(int i=0; i<3; ++i)
             handler.add(new HealthKit(R.nextInt(WIDTH), R.nextInt(HEIGHT), ID.HealthKit));
     }
 
@@ -87,6 +88,10 @@ public class Game extends Canvas implements Runnable {
 
     private void tick() {
         handler.tick();
+        if(handler.getPlayer().getSize() <= 0) {
+            JOptionPane.showMessageDialog(null, "My Goodness, this is such a failure");
+            stop();
+        }
     }
 
     private void render() {

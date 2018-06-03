@@ -5,5 +5,6 @@ public enum ID {
     BasicEnemy,
     HealthKit,
     Block,
-    Bullet
+    Bullet,
+    Bomb
 }

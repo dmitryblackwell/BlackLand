@@ -1,8 +1,6 @@
 package com.blackwell;
 
-import com.blackwell.entity.Bullet;
-import com.blackwell.entity.ID;
-import com.blackwell.entity.Player;
+import com.blackwell.entity.*;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -59,9 +57,16 @@ public class KeyInput extends KeyAdapter implements MouseListener {
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        handler.add(new Bullet(handler.getPlayer().getX(), handler.getPlayer().getY(),
-                e.getX(), e.getY(), ID.Bullet));
-        System.out.println("Left mouse key pressed: " + e.getX() +";"+ e.getY());
+        switch (e.getButton()){
+            case MouseEvent.BUTTON1:
+                handler.add(new Bullet(handler.getPlayer().getX(), handler.getPlayer().getY(),
+                        e.getX(), e.getY(), ID.Bullet));
+                break;
+            case MouseEvent.BUTTON3:
+                if (Math.abs(e.getX()-handler.getPlayer().getX()) < Block.SIZE*3 &&
+                    Math.abs(e.getY()-handler.getPlayer().getY()) < Block.SIZE*3)
+                    handler.add(new Bomb(e.getX(), e.getY(), ID.Bomb));
+        }
     }
 
     @Override

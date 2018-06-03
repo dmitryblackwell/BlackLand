@@ -30,6 +30,9 @@ public class Player extends GameObject {
     public void bulletCollision(){
         size -= 4;
     }
+    public void bombCollision(){
+        size -= 16;
+    }
     @Override
     public void render(Graphics g) {
         g.setColor(Color.WHITE);
