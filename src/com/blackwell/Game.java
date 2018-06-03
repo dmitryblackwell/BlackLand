@@ -1,15 +1,18 @@
-package com.blackwell.main;
+package com.blackwell;
+
+import com.blackwell.entity.*;
 
 import java.awt.*;
 import java.awt.image.BufferStrategy;
+import java.util.Random;
 
 public class Game extends Canvas implements Runnable {
     public static void main(String[] args) {
         new Game();
     }
 
-    public static final int WIDTH = 800;
-    public static final int HEIGHT = 500;
+    public static final int WIDTH = 1600;
+    public static final int HEIGHT = 1000;
 
     private Thread thread;
     private boolean running = false;
@@ -18,13 +21,24 @@ public class Game extends Canvas implements Runnable {
 
 
     Game(){
-        this.addKeyListener(new KeyInput(handler));
+        KeyInput keyInput = new KeyInput(handler);
+        this.addKeyListener(keyInput);
+        this.addMouseListener(keyInput);
         new Window(WIDTH, HEIGHT, "BlackLand", this);
-        handler.add(new Player(100,100,ID.Player));
-        for(int i=0; i<5; ++i)
-            handler.add(new BasicEnemy(i*50, 100, ID.BasicEnemy));
-    }
+        handler.add(new Player(WIDTH/2,HEIGHT/2,ID.Player));
 
+        Random R = new Random();
+        for(int i=0; i<40; ++i)
+            handler.add(new BasicEnemy((i+2)*32,100, ID.BasicEnemy));
+
+        for(int i=0; i<40; ++i)
+            for(int j=0; j<64; ++j)
+                if (R.nextInt(4) == 0)
+                    handler.add(new Block((j + R.nextInt(20)-10)*Block.SIZE, i*Block.SIZE, ID.Block));
+
+        for(int i=0; i<5; ++i)
+            handler.add(new HealthKit(R.nextInt(WIDTH), R.nextInt(HEIGHT), ID.HealthKit));
+    }
 
     public synchronized void start(){
         thread = new Thread(this);
@@ -43,6 +57,7 @@ public class Game extends Canvas implements Runnable {
 
     @Override
     public void run() {
+        this.requestFocus();
         long lastTime = System.nanoTime();
         double amountOfTicks = 60;
         double ns = 1000000000 / amountOfTicks;

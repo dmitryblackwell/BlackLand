@@ -1,4 +1,4 @@
-package com.blackwell.main;
+package com.blackwell.entity;
 
 import java.awt.*;
 
@@ -7,7 +7,7 @@ public abstract class GameObject {
     protected ID id;
     protected int vX, vY;
     protected int speed = 7;
-    protected final int SIZE = 32;
+    protected int size = 32;
 
     public GameObject(int x, int y, ID id) {
         this.x = x;
@@ -20,6 +20,27 @@ public abstract class GameObject {
         y += vY;
     }
     public abstract void render(Graphics g);
+    public Rectangle getBounds(){
+        return new Rectangle(x,y, size, size);
+    }
+    public boolean intersects(Rectangle rec){
+        return getBounds().intersects(rec);
+    }
+    public boolean contains(int x, int y){
+        return getBounds().contains(new Point(x,y));
+    }
+    public void stop(){
+        vX = 0;
+        vY = 0;
+    }
+
+
+    public void setCoord(int x, int y){
+        this.x = x;
+        this.y = y;
+    }
+
+    public int getSize(){ return size; }
 
     public int getX() { return x; }
     public void setX(int x) { this.x = x; }

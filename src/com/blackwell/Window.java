@@ -1,4 +1,4 @@
-package com.blackwell.main;
+package com.blackwell;
 
 import javax.swing.*;
 import java.awt.*;
