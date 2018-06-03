@@ -65,11 +65,14 @@ public class Handler implements Iterable<GameObject> {
 
 
                 if(o.getId() == ID.Bomb && o.intersects(object.getBounds())){
-                    toDelete.add(o);
-                    if (object.getId() == ID.BasicEnemy)
+                    if (object.getId() == ID.BasicEnemy) {
                         toDelete.add(object);
-                    else if (object.getId() == ID.Player)
+                        toDelete.add(o);
+                    }
+                    else if (object.getId() == ID.Player) {
                         getPlayer().bombCollision();
+                        toDelete.add(o);
+                    }
 
                 }
 
@@ -85,10 +88,13 @@ public class Handler implements Iterable<GameObject> {
 
         for(GameObject object : toDelete)
             objects.remove(object);
-        for(GameObject object : toAdd)
-            objects.add(object);
+        Iterator<GameObject> it = toAdd.iterator();
+        while (it.hasNext()){
+            objects.add(it.next());
+            it.remove();
+            System.out.println("obj added");
+        }
 
-        toAdd.clear();
         toDelete.clear();
     }
 

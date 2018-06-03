@@ -29,9 +29,10 @@ public class Game extends Canvas implements Runnable {
         handler.add(new Player(WIDTH/2,HEIGHT/2,ID.Player));
 
         Random R = new Random();
-        for(int i=0; i<60; ++i)
+        for(int i=0; i<40; ++i)
             handler.add(new BasicEnemy(i*32,100, ID.BasicEnemy));
-
+        for(int i=0; i<40; ++i)
+            handler.add(new BasicEnemy(i*32,HEIGHT-100, ID.BasicEnemy));
         for(int i=0; i<40; ++i)
             for(int j=0; j<64; ++j)
                 if (R.nextInt(4) == 0)
