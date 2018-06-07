@@ -22,13 +22,13 @@ public class Player extends GameObject {
     public void stopY() { vY = 0; }
 
     public void enemyCollision(){
-        size -= 2;
+        size -= 1;
     }
     public void healthKitCollision(){
         size += 16;
     }
     public void bulletCollision(){
-        size -= 4;
+        size -= 2;
     }
     public void bombCollision(){
         size -= 16;
