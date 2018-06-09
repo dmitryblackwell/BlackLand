@@ -8,46 +8,26 @@ import java.awt.image.BufferStrategy;
 import java.util.Random;
 
 public class Game extends Canvas implements Runnable {
-    public static void main(String[] args) {
-        new Game();
-    }
-
     public static final int WIDTH = 1600;
     public static final int HEIGHT = 1000;
+
     public static final Color BG_COLOR = Color.BLACK;
     private Thread thread;
     private boolean running = false;
 
     private Handler handler = new Handler();
 
-
+    public static void main(String[] args) {
+        new Game();
+    }
     Game(){
         KeyInput keyInput = new KeyInput(handler);
         this.addKeyListener(keyInput);
         this.addMouseListener(keyInput);
-        new Window(WIDTH, HEIGHT, "BlackLand", this);
-        handler.add(new Player(WIDTH/2,HEIGHT/2,ID.Player));
-
-        Random R = new Random();
-
-        for(int i=0; i<70; ++i)
-            handler.add(new BasicEnemy(i*20,100, ID.BasicEnemy));
-//        for(int i=0; i<70; ++i)
-//            handler.add(new BasicEnemy(i*20,HEIGHT-100, ID.BasicEnemy));
-//        for(int i=0; i<50; ++i)
-//            handler.add(new BasicEnemy(100,i*32, ID.BasicEnemy));
-//        for(int i=0; i<50; ++i)
-//            handler.add(new BasicEnemy(WIDTH-100,i*32, ID.BasicEnemy));
-
-
-        for(int i=0; i<40; ++i)
-            for(int j=0; j<64; ++j)
-                if (R.nextInt(4) == 0)
-                    handler.add(new Block((j + R.nextInt(20)-10)*Block.SIZE, i*Block.SIZE, ID.Block));
-
-        for(int i=0; i<3; ++i)
-            handler.add(new HealthKit(R.nextInt(WIDTH), R.nextInt(HEIGHT), ID.HealthKit));
+        new Window(this);
     }
+
+
 
     public synchronized void start(){
         thread = new Thread(this);
@@ -101,6 +81,10 @@ public class Game extends Canvas implements Runnable {
             stop();
         }
     }
+
+
+
+
 
     private void render() {
         BufferStrategy bs = this.getBufferStrategy();

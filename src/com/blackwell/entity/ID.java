@@ -6,5 +6,6 @@ public enum ID {
     HealthKit,
     Block,
     Bullet,
-    Bomb
+    Bomb,
+    HUD
 }

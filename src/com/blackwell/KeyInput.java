@@ -41,7 +41,7 @@ public class KeyInput extends KeyAdapter implements MouseListener {
             case KeyEvent.VK_D:
                 p.stopX(); break;
             case KeyEvent.VK_SPACE:
-                p.warpJump(); break;
+                p.warpJump();
         }
     }
 
