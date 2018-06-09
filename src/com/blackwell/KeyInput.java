@@ -57,15 +57,22 @@ public class KeyInput extends KeyAdapter implements MouseListener {
 
     @Override
     public void mouseReleased(MouseEvent e) {
+        Player p = handler.getPlayer();
         switch (e.getButton()){
             case MouseEvent.BUTTON1:
-                handler.add(new Bullet(handler.getPlayer().getX(), handler.getPlayer().getY(),
-                        e.getX(), e.getY(), ID.Bullet));
+                if (p.isPossibleShoot()) {
+                    handler.add(new Bullet(p.getX(), p.getY(),
+                            e.getX(), e.getY(), ID.Bullet));
+                    p.bulletSpam();
+                }
                 break;
             case MouseEvent.BUTTON3:
-                if (Math.abs(e.getX()-handler.getPlayer().getX()) < Block.SIZE*3 &&
-                    Math.abs(e.getY()-handler.getPlayer().getY()) < Block.SIZE*3)
-                    handler.add(new Bomb(e.getX(), e.getY(), ID.Bomb));
+                if(p.isPossibleBomb()) {
+                    int shift = 8;
+                    handler.add(new Bomb(p.getX()-(p.getVelX()*shift),
+                            p.getY()-(p.getVelY()*shift), ID.Bomb));
+                    p.bombSpam();
+                }
         }
     }
 

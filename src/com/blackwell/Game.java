@@ -14,7 +14,7 @@ public class Game extends Canvas implements Runnable {
 
     public static final int WIDTH = 1600;
     public static final int HEIGHT = 1000;
-
+    public static final Color BG_COLOR = Color.BLACK;
     private Thread thread;
     private boolean running = false;
 
@@ -32,12 +32,12 @@ public class Game extends Canvas implements Runnable {
 
         for(int i=0; i<70; ++i)
             handler.add(new BasicEnemy(i*20,100, ID.BasicEnemy));
-        for(int i=0; i<70; ++i)
-            handler.add(new BasicEnemy(i*20,HEIGHT-100, ID.BasicEnemy));
-        for(int i=0; i<50; ++i)
-            handler.add(new BasicEnemy(100,i*32, ID.BasicEnemy));
-        for(int i=0; i<50; ++i)
-            handler.add(new BasicEnemy(WIDTH-100,i*32, ID.BasicEnemy));
+//        for(int i=0; i<70; ++i)
+//            handler.add(new BasicEnemy(i*20,HEIGHT-100, ID.BasicEnemy));
+//        for(int i=0; i<50; ++i)
+//            handler.add(new BasicEnemy(100,i*32, ID.BasicEnemy));
+//        for(int i=0; i<50; ++i)
+//            handler.add(new BasicEnemy(WIDTH-100,i*32, ID.BasicEnemy));
 
 
         for(int i=0; i<40; ++i)
@@ -45,7 +45,7 @@ public class Game extends Canvas implements Runnable {
                 if (R.nextInt(4) == 0)
                     handler.add(new Block((j + R.nextInt(20)-10)*Block.SIZE, i*Block.SIZE, ID.Block));
 
-        for(int i=0; i<2; ++i)
+        for(int i=0; i<3; ++i)
             handler.add(new HealthKit(R.nextInt(WIDTH), R.nextInt(HEIGHT), ID.HealthKit));
     }
 
@@ -111,7 +111,7 @@ public class Game extends Canvas implements Runnable {
 
         Graphics g = bs.getDrawGraphics();
 
-        g.setColor(Color.BLACK);
+        g.setColor(BG_COLOR);
         g.fillRect(0,0,WIDTH,HEIGHT);
 
         handler.render(g);
