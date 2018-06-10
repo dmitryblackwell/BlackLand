@@ -1,6 +1,7 @@
 package com.blackwell;
 
 import com.blackwell.entity.*;
+import javafx.geometry.Pos;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ public class Handler implements Iterable<GameObject> {
     private ArrayList<GameObject> toDelete = new ArrayList<>();
     private ArrayList<GameObject> toAdd = new ArrayList<>();
     private int score;
+    private int FPS=0;
     public static final int SPAWN_ENEMIES = 20;
     public static final int SPAWN_TIME = 20_000;
     private long lastTimeUpdate;
@@ -39,77 +41,34 @@ public class Handler implements Iterable<GameObject> {
 
         add(new Player(WIDTH/2,HEIGHT/2,ID.Player));
 
-        // 1600 - 40
-        // 2560 - 89
-
-        // 1000 - 64
-        // 1080 - 72
-
-
-//        for(int i=0; i<HEIGHT/Block.SIZE; ++i)
-//            for(int j=0; j<WIDTH/Block.SIZE; ++j)
-//                if (R.nextInt(7) == 0)
-//                    add(new Block((j + R.nextInt(20)-10)*Block.SIZE, i*Block.SIZE, ID.Block));
-
-        Maze maze = new Maze();
-        ArrayList<Point> blocks = maze.getBlocks();
-        for(Point p : blocks)
-            add(new Block(p.x*Block.SIZE, p.y*Block.SIZE));
-    }
-/*
-    private boolean isInField(int x, int y, int lX, int lY){
-        return x>=0 && x<lX && y>=0 && y<lY;
-    }
-
-
-
-
-
-
-    private void blocksGenerator(){
-        int lX = WIDTH/Block.SIZE;
-        int lY = HEIGHT/Block.SIZE;
-
-        boolean[][] isVisited = new boolean[lY][lX];
-        int vX, vY;
-        int x,y,l;
-        x = R.nextInt(lX);
-        y = R.nextInt(lY);
-        for(int i=0; i<15; ++i) {
-
-
-
-            if(R.nextBoolean()){
-                vX = 0;
-                vY = R.nextBoolean() ? 1 : -1;
-            }
-            else {
-                vX = R.nextBoolean() ? 1 : -1;
-                vY = 0;
-            }
-            l = R.nextInt(10)+5;
-            for(int j=0; j<l; ++j){
-                if( !isInField(x,y,lX,lY) || isVisited[y][x]) break;
-
-                add(new Block(x*Block.SIZE, y*Block.SIZE));
-                isVisited[y][x] = true;
-                if (vX == 0){
-                    isVisited[y+1][x] = true;
-                    isVisited[y-1][x] = true;
+        ArrayList<Point> points = new ArrayList<>();
+        for(int i=0; i<HEIGHT/Block.SIZE; ++i)
+            for(int j=0; j<WIDTH/Block.SIZE; ++j)
+                if (R.nextInt(3) == 0) {
+                    points.add(new Point((j + R.nextInt(20) - 10),i));
+                    //add(new Block((j + R.nextInt(20) - 10) * Block.SIZE, i * Block.SIZE, ID.Block));
                 }
-                else {
-                    isVisited[y][x+1] = true;
-                    isVisited[y][x-1] = true;
-                }
-                x += vX;
-                y += vY;
-            }
 
+        Iterator it = points.iterator();
+        Point p;
+        while (it.hasNext()){
+            p = (Point) it.next();
+
+            if (points.contains(new Point(p.x+1, p.y))) continue;
+            if (points.contains(new Point(p.x-1, p.y))) continue;
+            if (points.contains(new Point(p.x, p.y+1))) continue;
+            if (points.contains(new Point(p.x, p.y-1))) continue;
+
+            it.remove();
         }
 
-    }*/
+        for(Point point : points)
+            add(new Block(point.x*Block.SIZE, point.y*Block.SIZE));
+    }
 
-
+    public void setFPS(int FPS) {
+        this.FPS = FPS;
+    }
 
     private void healthkitSpawn(){
         for(int i=0; i<healthkitSpawn; ++i)
@@ -210,7 +169,6 @@ public class Handler implements Iterable<GameObject> {
                         ((Player) o).bulletCollision();
                 }
             }
-
         }
 
         for(GameObject object : toDelete)
@@ -255,6 +213,7 @@ public class Handler implements Iterable<GameObject> {
             int secs = time - mins * 60;
             g.setFont(new Font("TimesRoman", Font.ITALIC, 30));
             g.drawString(String.format("%02d:%02d", mins, secs), 20, 70);
+            g.drawString(String.format("%3d",FPS),WIDTH-60,40);
 
         }catch (Exception e) {
             e.printStackTrace();

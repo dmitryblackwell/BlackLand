@@ -2,6 +2,7 @@ package com.blackwell;
 
 import com.blackwell.entity.*;
 
+import javax.swing.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -47,11 +48,13 @@ public class KeyInput extends KeyAdapter implements MouseListener {
             case KeyEvent.VK_D:
                 p.stopX();
                 break;
-            case KeyEvent.VK_SPACE:
-                p.warpJump();
-                break;
+//            case KeyEvent.VK_SPACE:
+//                p.warpJump();
+//                break;
             case KeyEvent.VK_ESCAPE:
-                window.close();
+                int result = JOptionPane.showConfirmDialog(null, "Exit?");
+                if(result == JOptionPane.OK_OPTION)
+                    window.close();
                 break;
         }
     }
