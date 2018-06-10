@@ -7,5 +7,6 @@ public enum ID {
     Block,
     Bullet,
     Bomb,
-    HUD
+    HUD,
+    Wall
 }

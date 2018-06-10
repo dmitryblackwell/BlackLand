@@ -18,7 +18,7 @@ public class Block extends GameObject {
         g.setColor(Color.CYAN);
         g.fillRect(x,y, size, size);
 
-        g.setColor(Game.BG_COLOR);
-        g.fillRect(x+BORDER, y+BORDER, size-BORDER*2, size-BORDER*2);
+//        g.setColor(Game.BG_COLOR);
+//        g.fillRect(x+BORDER, y+BORDER, size-BORDER*2, size-BORDER*2);
     }
 }

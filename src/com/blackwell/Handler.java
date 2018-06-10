@@ -41,29 +41,67 @@ public class Handler implements Iterable<GameObject> {
 
         add(new Player(WIDTH/2,HEIGHT/2,ID.Player));
 
-        ArrayList<Point> points = new ArrayList<>();
-        for(int i=0; i<HEIGHT/Block.SIZE; ++i)
-            for(int j=0; j<WIDTH/Block.SIZE; ++j)
-                if (R.nextInt(3) == 0) {
-                    points.add(new Point((j + R.nextInt(20) - 10),i));
-                    //add(new Block((j + R.nextInt(20) - 10) * Block.SIZE, i * Block.SIZE, ID.Block));
-                }
+        ArrayList<Point> points;// = new ArrayList<>();
+//        for(int i=0; i<HEIGHT/Block.SIZE; ++i)
+//            for(int j=0; j<WIDTH/Block.SIZE; ++j)
+//                if (R.nextInt(2) == 0) {
+//                    points.add(new Point((j + R.nextInt(20) - 10),i));
+//                    //add(new Block((j + R.nextInt(20) - 10) * Block.SIZE, i * Block.SIZE, ID.Block));
+//                }
 
+        Maze maze = new Maze();
+        points = maze.getBlocks();
         Iterator it = points.iterator();
         Point p;
+//        while (it.hasNext()){
+//            p = (Point) it.next();
+//
+//            if (points.contains(new Point(p.x+1, p.y))) continue;
+//            if (points.contains(new Point(p.x-1, p.y))) continue;
+//            if (points.contains(new Point(p.x, p.y+1))) continue;
+//            if (points.contains(new Point(p.x, p.y-1))) continue;
+//
+//            it.remove();
+//        }
+
+//        for(Point point : points)
+//            add(new Block(point.x*Block.SIZE, point.y*Block.SIZE));
+
+        it = points.iterator();
+        ArrayList<Point> toRemove = new ArrayList<>();
+        int wallsCount = 0;
         while (it.hasNext()){
             p = (Point) it.next();
+            if (toRemove.contains(p)) {
+                it.remove();
+                continue;
+            }
 
-            if (points.contains(new Point(p.x+1, p.y))) continue;
-            if (points.contains(new Point(p.x-1, p.y))) continue;
-            if (points.contains(new Point(p.x, p.y+1))) continue;
-            if (points.contains(new Point(p.x, p.y-1))) continue;
+            toRemove.add(p);
+            Point last = new Point(p.x,p.y);
+            do {
+                last.x++;
+                toRemove.add(new Point(last));
+            }while (points.contains(last));
 
-            it.remove();
+            if ((last.x - p.x) < 2){
+                last = new Point(p.x,p.y);
+                do {
+                    last.y++;
+                    toRemove.add(new Point(last));
+                }while (points.contains(last));
+
+                if ((last.y - p.y) < 2) continue;
+
+                add(new Wall(p.x*Block.SIZE, p.y*Block.SIZE, Block.SIZE, (last.y-p.y)*Block.SIZE, ID.Block));
+                wallsCount++;
+                continue;
+            }
+
+            wallsCount++;
+            add(new Wall(p.x*Block.SIZE,p.y*Block.SIZE,(last.x-p.x)*Block.SIZE,Block.SIZE, ID.Block));
         }
-
-        for(Point point : points)
-            add(new Block(point.x*Block.SIZE, point.y*Block.SIZE));
+        System.out.println(wallsCount);
     }
 
     public void setFPS(int FPS) {
@@ -177,7 +215,7 @@ public class Handler implements Iterable<GameObject> {
         while (it.hasNext()){
             objects.add(it.next());
             it.remove();
-            System.out.println("obj added");
+            //System.out.println("obj added");
         }
 
         toDelete.clear();
