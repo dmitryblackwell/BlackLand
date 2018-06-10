@@ -4,10 +4,10 @@ import java.awt.*;
 
 public class Wall extends GameObject {
 
-    int with, height;
+    private int with, height;
 
-    public Wall(int x, int y, int with, int height, ID id) {
-        super(x, y, id);
+    public Wall(int x, int y, int with, int height) {
+        super(x, y, ID.Wall);
         this.with = with;
         this.height = height;
     }

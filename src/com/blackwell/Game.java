@@ -8,22 +8,23 @@ import java.awt.image.BufferStrategy;
 public class Game extends Canvas implements Runnable {
     public static final int WIDTH;
     public static final int HEIGHT;
+    static final Color BG_COLOR = Color.BLACK;
 
+    // screen init
     static {
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
         WIDTH = screen.width;
         HEIGHT = screen.height;
     }
 
-    public static final Color BG_COLOR = Color.BLACK;
+
     private Thread thread;
     private boolean running = false;
-
     private Handler handler = new Handler();
 
     public static void main(String[] args) { new Game(); }
 
-    Game(){
+    private Game(){
         Window window = new Window(this);
         KeyInput keyInput = new KeyInput(handler, window);
         this.addKeyListener(keyInput);
@@ -31,15 +32,13 @@ public class Game extends Canvas implements Runnable {
 
     }
 
-
-
-    public synchronized void start(){
+    synchronized void start(){
         thread = new Thread(this);
         thread.start();
         running = true;
     }
 
-    public synchronized void stop(){
+    private synchronized void stop(){
         try {
             thread.join();
             running = false;
@@ -87,10 +86,6 @@ public class Game extends Canvas implements Runnable {
             //stop();
         }
     }
-
-
-
-
 
     private void render() {
         BufferStrategy bs = this.getBufferStrategy();

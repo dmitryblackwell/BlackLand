@@ -5,11 +5,12 @@ import java.awt.*;
 public abstract class GameObject {
     protected int x, y;
     protected ID id;
-    protected int vX, vY;
-    protected int speed = 7;
-    protected int size = 32;
 
-    public GameObject(int x, int y, ID id) {
+    int vX, vY;
+    int speed = 7;
+    int size = 32;
+
+    GameObject(int x, int y, ID id) {
         this.x = x;
         this.y = y;
         this.id = id;

@@ -4,14 +4,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowEvent;
 
-public class Window extends Canvas {
+class Window extends Canvas {
     private JFrame frame;
 
-    public Window(Game game){
+    Window(Game game){
         frame = new JFrame("BlackLand");
-//        frame.setPreferredSize(new Dimension(Game.WIDTH,Game.HEIGHT));
-//        frame.setMaximumSize(new Dimension(Game.WIDTH,Game.HEIGHT));
-//        frame.setMinimumSize(new Dimension(Game.WIDTH,Game.HEIGHT));
 
         frame.getContentPane().setBackground(Game.BG_COLOR);
         frame.setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
@@ -31,7 +28,7 @@ public class Window extends Canvas {
         game.start();
     }
 
-    public void close(){
+    void close(){
         frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
     }
 }

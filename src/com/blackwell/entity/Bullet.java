@@ -4,8 +4,13 @@ import java.awt.*;
 
 public class Bullet extends GameObject {
 
-    public Bullet(int x, int y, int moveToX, int moveToY, ID id) {
-        super(x, y, id);
+    private int lives = 100;
+
+    public Bullet(int x, int y, int moveToX, int moveToY) {
+        super(x, y, ID.Bullet);
+
+        final int cSpeed= 2;
+
         size /= 5;
         speed *= cSpeed;
 
@@ -15,11 +20,11 @@ public class Bullet extends GameObject {
         this.x += vX*cSpeed;
         this.y += vY*cSpeed;
     }
-    private int cSpeed= 2;
-    private int lives = 100;
+
 
     public int getLives() { return lives; }
     public void minusLive() {lives--;}
+
     @Override
     public void render(Graphics g) {
         g.setColor(Color.MAGENTA);

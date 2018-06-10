@@ -5,14 +5,13 @@ import java.awt.*;
 
 public class HealthKit extends GameObject {
 
-    public HealthKit(int x, int y, ID id) {
-        super(x, y, id);
+    public HealthKit(int x, int y) {
+        super(x, y, ID.HealthKit);
     }
     private ImageIcon icon = new ImageIcon("res/healthkit.png");
+
     @Override
     public void render(Graphics g) {
-//        g.setColor(Color.GREEN);
-//        g.fillRect(x,y, size, size);
         g.drawImage(icon.getImage(),x,y,null);
     }
 }
