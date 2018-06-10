@@ -10,7 +10,12 @@ import java.awt.event.MouseListener;
 public class KeyInput extends KeyAdapter implements MouseListener {
 
     private Handler handler;
+    private Window window;
 
+    public KeyInput(Handler handler, Window window) {
+        this(handler);
+        this.window = window;
+    }
     public KeyInput(Handler handler) {
         this.handler = handler;
     }
@@ -33,15 +38,21 @@ public class KeyInput extends KeyAdapter implements MouseListener {
     @Override
     public void keyReleased(KeyEvent e) {
         Player p = handler.getPlayer();
-        switch (e.getKeyCode()){
+        switch (e.getKeyCode()) {
             case KeyEvent.VK_W:
             case KeyEvent.VK_S:
-                p.stopY(); break;
+                p.stopY();
+                break;
             case KeyEvent.VK_A:
             case KeyEvent.VK_D:
-                p.stopX(); break;
+                p.stopX();
+                break;
             case KeyEvent.VK_SPACE:
                 p.warpJump();
+                break;
+            case KeyEvent.VK_ESCAPE:
+                window.close();
+                break;
         }
     }
 

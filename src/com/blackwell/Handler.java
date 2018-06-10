@@ -3,7 +3,6 @@ package com.blackwell;
 import com.blackwell.entity.*;
 
 import java.awt.*;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -20,8 +19,9 @@ public class Handler implements Iterable<GameObject> {
     public static final int SPAWN_ENEMIES = 20;
     public static final int SPAWN_TIME = 20_000;
     private long lastTimeUpdate;
-    private int enemiesCount = SPAWN_ENEMIES;
-    public int spawnTime = SPAWN_TIME;
+    private int enemiesCount;
+    public int spawnTime;
+    public int healthkitSpawn;
     private Random R = new Random();
 
 
@@ -33,19 +33,88 @@ public class Handler implements Iterable<GameObject> {
         toDelete.clear();
         toAdd.clear();
         lastTimeUpdate = System.currentTimeMillis() - SPAWN_TIME;
+        enemiesCount = SPAWN_ENEMIES;
+        spawnTime = SPAWN_TIME;
+        healthkitSpawn = 2;
 
         add(new Player(WIDTH/2,HEIGHT/2,ID.Player));
-        for(int i=0; i<40; ++i)
-            for(int j=0; j<64; ++j)
-                if (R.nextInt(4) == 0)
-                    add(new Block((j + R.nextInt(20)-10)*Block.SIZE, i*Block.SIZE, ID.Block));
+
+        // 1600 - 40
+        // 2560 - 89
+
+        // 1000 - 64
+        // 1080 - 72
+
+
+//        for(int i=0; i<HEIGHT/Block.SIZE; ++i)
+//            for(int j=0; j<WIDTH/Block.SIZE; ++j)
+//                if (R.nextInt(7) == 0)
+//                    add(new Block((j + R.nextInt(20)-10)*Block.SIZE, i*Block.SIZE, ID.Block));
+
+        Maze maze = new Maze();
+        ArrayList<Point> blocks = maze.getBlocks();
+        for(Point p : blocks)
+            add(new Block(p.x*Block.SIZE, p.y*Block.SIZE));
+    }
+/*
+    private boolean isInField(int x, int y, int lX, int lY){
+        return x>=0 && x<lX && y>=0 && y<lY;
     }
 
 
 
+
+
+
+    private void blocksGenerator(){
+        int lX = WIDTH/Block.SIZE;
+        int lY = HEIGHT/Block.SIZE;
+
+        boolean[][] isVisited = new boolean[lY][lX];
+        int vX, vY;
+        int x,y,l;
+        x = R.nextInt(lX);
+        y = R.nextInt(lY);
+        for(int i=0; i<15; ++i) {
+
+
+
+            if(R.nextBoolean()){
+                vX = 0;
+                vY = R.nextBoolean() ? 1 : -1;
+            }
+            else {
+                vX = R.nextBoolean() ? 1 : -1;
+                vY = 0;
+            }
+            l = R.nextInt(10)+5;
+            for(int j=0; j<l; ++j){
+                if( !isInField(x,y,lX,lY) || isVisited[y][x]) break;
+
+                add(new Block(x*Block.SIZE, y*Block.SIZE));
+                isVisited[y][x] = true;
+                if (vX == 0){
+                    isVisited[y+1][x] = true;
+                    isVisited[y-1][x] = true;
+                }
+                else {
+                    isVisited[y][x+1] = true;
+                    isVisited[y][x-1] = true;
+                }
+                x += vX;
+                y += vY;
+            }
+
+        }
+
+    }*/
+
+
+
     private void healthkitSpawn(){
-        for(int i=0; i<2; ++i)
+        for(int i=0; i<healthkitSpawn; ++i)
             add(new HealthKit(R.nextInt(WIDTH), R.nextInt(HEIGHT), ID.HealthKit));
+        healthkitSpawn++;
     }
     private void enemiesSpawn(){
         for(int i=0; i<enemiesCount; ++i) {

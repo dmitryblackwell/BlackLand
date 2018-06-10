@@ -7,6 +7,7 @@ import java.awt.*;
 public class Block extends GameObject {
     public static final int SIZE = 24;
     private static final int BORDER = 2;
+    public Block(int x, int y){ this(x,y,ID.Block); }
     public Block(int x, int y, ID id) {
         super(x, y, id);
         size = SIZE;

@@ -1,15 +1,19 @@
 package com.blackwell;
 
-import com.blackwell.entity.*;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
-import java.util.Random;
+
 
 public class Game extends Canvas implements Runnable {
-    public static final int WIDTH = 1600;
-    public static final int HEIGHT = 1000;
+    public static final int WIDTH;
+    public static final int HEIGHT;
+
+    static {
+        Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+        WIDTH = screen.width;
+        HEIGHT = screen.height;
+    }
 
     public static final Color BG_COLOR = Color.BLACK;
     private Thread thread;
@@ -17,14 +21,14 @@ public class Game extends Canvas implements Runnable {
 
     private Handler handler = new Handler();
 
-    public static void main(String[] args) {
-        new Game();
-    }
+    public static void main(String[] args) { new Game(); }
+
     Game(){
-        KeyInput keyInput = new KeyInput(handler);
+        Window window = new Window(this);
+        KeyInput keyInput = new KeyInput(handler, window);
         this.addKeyListener(keyInput);
         this.addMouseListener(keyInput);
-        new Window(this);
+
     }
 
 
@@ -78,7 +82,8 @@ public class Game extends Canvas implements Runnable {
         handler.tick();
         if(handler.getPlayer().getSize() <= 0) {
             JOptionPane.showMessageDialog(null, "My Goodness, this is such a failure");
-            stop();
+            handler.init();
+            //stop();
         }
     }
 

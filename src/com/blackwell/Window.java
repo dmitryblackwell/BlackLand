@@ -2,14 +2,16 @@ package com.blackwell;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowEvent;
 
 public class Window extends Canvas {
-    public Window(Game game){
-        JFrame frame = new JFrame("BlackLand");
+    private JFrame frame;
 
-        frame.setPreferredSize(new Dimension(Game.WIDTH,Game.HEIGHT));
-        frame.setMaximumSize(new Dimension(Game.WIDTH,Game.HEIGHT));
-        frame.setMinimumSize(new Dimension(Game.WIDTH,Game.HEIGHT));
+    public Window(Game game){
+        frame = new JFrame("BlackLand");
+//        frame.setPreferredSize(new Dimension(Game.WIDTH,Game.HEIGHT));
+//        frame.setMaximumSize(new Dimension(Game.WIDTH,Game.HEIGHT));
+//        frame.setMinimumSize(new Dimension(Game.WIDTH,Game.HEIGHT));
 
         frame.getContentPane().setBackground(Game.BG_COLOR);
         frame.setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
@@ -22,7 +24,14 @@ public class Window extends Canvas {
         ImageIcon icon = new ImageIcon("res/internet.png");
         frame.setIconImage(icon.getImage());
 
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        frame.setUndecorated(true);
+
         frame.setVisible(true);
         game.start();
+    }
+
+    public void close(){
+        frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
     }
 }
