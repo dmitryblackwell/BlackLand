@@ -12,10 +12,23 @@ public class Wall extends GameObject {
         this.height = height;
     }
 
-//    @Override
-//    public int getSize() {
-//        throw new UnsupportedOperationException();
-//    }
+    @Override
+    public Rectangle getBounds() {
+        return new Rectangle(x,y,with,height);
+    }
+
+    @Override
+    public int getSize() {
+        throw new UnsupportedOperationException();
+    }
+
+    public int getWith() {
+        return with;
+    }
+
+    public int getHeight() {
+        return height;
+    }
 
     @Override
     public void render(Graphics g) {

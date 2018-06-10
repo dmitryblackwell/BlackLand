@@ -7,8 +7,11 @@ import java.awt.*;
 public class Player extends GameObject {
     public Player(int x, int y, ID id) {
         super(x, y, id);
+        size = Block.SIZE;
     }
     private int warpSize = 10;
+
+
 
     public void left() { vX = -speed; }
     public void right() { vX = +speed; }
@@ -38,22 +41,22 @@ public class Player extends GameObject {
 
     }
 
-    public void enemyCollision(){
-        size -= 1;
-    }
-    public void healthKitCollision(){
-        size += 16;
-    }
-    public void bulletCollision(){
-        size -= 2;
-    }
-    public void bombCollision(){
-        size -= 16;
-    }
-    public void bulletSpam() { size -= 4; }
-    public void bombSpam() { size -= 8; }
-    public boolean isPossibleShoot() { return size > 4; }
-    public boolean isPossibleBomb() { return size > 8; }
+//    public void enemyCollision(){
+//        size -= 1;
+//    }
+//    public void healthKitCollision(){
+//        size += 16;
+//    }
+//    public void bulletCollision(){
+//        size -= 2;
+//    }
+//    public void bombCollision(){
+//        size -= 16;
+//    }
+//    public void bulletSpam() { size -= 4; }
+//    public void bombSpam() { size -= 8; }
+//    public boolean isPossibleShoot() { return size > 4; }
+//    public boolean isPossibleBomb() { return size > 8; }
     @Override
     public void render(Graphics g) {
         g.setColor(Color.WHITE);

@@ -81,7 +81,7 @@ public class Game extends Canvas implements Runnable {
 
     private void tick() {
         handler.tick();
-        if(handler.getPlayer().getSize() <= 0) {
+        if(handler.getHealth() <= 0) {
             JOptionPane.showMessageDialog(null, "My Goodness, this is such a failure");
             handler.init();
             //stop();

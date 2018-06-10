@@ -16,10 +16,10 @@ public class Bullet extends GameObject {
         this.y += vY*cSpeed;
     }
     private int cSpeed= 2;
-    private int lives = 1;
+    private int lives = 100;
 
     public int getLives() { return lives; }
-
+    public void minusLive() {lives--;}
     @Override
     public void render(Graphics g) {
         g.setColor(Color.MAGENTA);

@@ -29,6 +29,9 @@ public abstract class GameObject {
     public boolean contains(int x, int y){
         return getBounds().contains(new Point(x,y));
     }
+    public boolean contains(int x, int y, int x1, int y1){
+        return (contains(x,y) || contains(x1,y1)) && contains(Math.abs(x-x1)/2,Math.abs(y-y1)/2);
+    }
     public void stop(){
         vX = 0;
         vY = 0;
