@@ -1,30 +1,58 @@
 package com.blackwell;
 
 import com.blackwell.entity.Player;
+import com.blackwell.entity.PlayerList;
 
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferStrategy;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
-public class GamePlay extends Canvas implements Runnable, TCPConnectionListener {
+public class GamePlay extends Canvas implements Runnable, TCPConnectionListener{
+
     private TCPConnection connection;
-    private Random R = new Random();
-    private Player hero = new Player(String.valueOf(R.nextInt(900_000)+100_000),
-            R.nextInt(500), R.nextInt(500));
-    private List<Player> players = new ArrayList<>();
+    private Player hero = new Player();
+    private PlayerList players = new PlayerList();
 
     GamePlay(){
+        addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                switch (e.getKeyCode()){
+                    case KeyEvent.VK_A:
+                        hero.left(); break;
+                    case KeyEvent.VK_D:
+                        hero.right(); break;
+                    case KeyEvent.VK_S:
+                        hero.down(); break;
+                    case KeyEvent.VK_W:
+                        hero.up(); break;
+                }
+            }
 
-        new Window(this);
+            @Override
+            public void keyReleased(KeyEvent e) {
+                switch (e.getKeyCode()){
+                    case KeyEvent.VK_A:
+                    case KeyEvent.VK_D:
+                        hero.stopX(); break;
+                    case KeyEvent.VK_S:
+                    case KeyEvent.VK_W:
+                        hero.stopY(); break;
+                }
+            }
+
+        });
+
+
+        requestFocus();
+        new Window(this, hero.getLogin());
         (new Thread(this)).start();
-
         players.add(hero);
         try {
             connection = new TCPConnection(this, "192.168.31.142", PORT);
-            connection.sendString(hero.getX() +" "+ hero.getY());
+            connection.sendPlayer(hero);
             System.out.println("Connection created");
         } catch (IOException e) {
             e.printStackTrace();
@@ -34,8 +62,10 @@ public class GamePlay extends Canvas implements Runnable, TCPConnectionListener 
 
     private void drawPlayers(Graphics g){
         g.setColor(Color.BLACK);
-        for(Player p : players)
-            g.fillRect(p.getX(), p.getY(), Player.WIDTH, Player.WIDTH);
+        for(Player p : players) {
+            g.fillRect(p.getX(), p.getY(), Player.SIZE, Player.SIZE);
+            p.tick();
+        }
     }
 
     @Override
@@ -49,7 +79,20 @@ public class GamePlay extends Canvas implements Runnable, TCPConnectionListener 
             }
             Graphics g = bs.getDrawGraphics();
 
+            g.setColor(Color.WHITE);
+            g.fillRect(0,0,Window.WIDTH, Window.HEIGHT);
+
+
             drawPlayers(g);
+
+
+            connection.sendPlayer(hero);
+
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
             g.dispose();
             bs.show();
@@ -58,26 +101,26 @@ public class GamePlay extends Canvas implements Runnable, TCPConnectionListener 
 
     @Override
     public void onConnectionReady(TCPConnection tcpConnection) {
-        printMessage(">>> Connection ready...");
+        System.out.println("Connection ready");
     }
 
     @Override
-    public void onReceiveString(TCPConnection tcpConnection, String value) {
-        String[] data = value.split(" ");
-        players.add(new Player("", Integer.valueOf(data[0]), Integer.valueOf(data[1])));
+    public void onReceivePlayer(TCPConnection tcpConnection, Player p) {
+        if (!p.equals(hero)) {
+            System.out.println("Player " + p + " received");
+            players.add(p);
+        }
     }
 
     @Override
     public void onDisconnect(TCPConnection tcpConnection) {
-        printMessage(">>> Connection close.");
+        System.out.println("Connection close");
     }
 
     @Override
     public void onException(TCPConnection tcpConnection, Exception ex) {
-        printMessage(">>> Connection exception: " + ex);
+        System.out.println("Connection exception: " + ex);
     }
 
-    private synchronized void printMessage(String msg){
-        System.out.println(msg);
-    }
+
 }
