@@ -1,12 +1,11 @@
 package com.blackwell;
 
-import com.blackwell.entity.Player;
+import com.blackwell.entity.GameObject;
 
 import java.io.*;
 import java.net.Socket;
 
 public class TCPConnection{
-    private static final String CHARSET = "UTF-8";
 
     private final Socket socket;
     private final Thread rxThread;
@@ -31,7 +30,7 @@ public class TCPConnection{
             try {
                 eventListener.onConnectionReady(TCPConnection.this);
                 while (!Thread.currentThread().isInterrupted()){
-                    eventListener.onReceivePlayer(TCPConnection.this, (Player) in.readObject());
+                    eventListener.onGameObjectReceive(TCPConnection.this, (GameObject) in.readObject());
                 }
             } catch (IOException | ClassNotFoundException e) {
                 eventListener.onException(TCPConnection.this, e);
@@ -43,11 +42,11 @@ public class TCPConnection{
         rxThread.start();
     }
 
-    public synchronized void sendPlayer(Player p){
+    public synchronized void sendGameObject(GameObject gameObject){
         try {
             //System.out.println("Connection player in: " + p);
             out.reset();
-            out.writeObject(p);
+            out.writeObject(gameObject);
             out.flush();
             //System.out.println("Connection player out: " + p);
         } catch (IOException e) {

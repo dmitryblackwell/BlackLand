@@ -1,7 +1,8 @@
 package com.blackwell;
 
+import com.blackwell.entity.GameObject;
 import com.blackwell.entity.Player;
-import com.blackwell.entity.PlayerList;
+import com.blackwell.entity.GameObjectList;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -25,7 +26,7 @@ public class Server implements TCPConnectionListener {
     }
 
     private final List<TCPConnection> connections = new ArrayList<>();
-    private final PlayerList players = new PlayerList();
+    private final GameObjectList players = new GameObjectList();
 
     private Server(){
         System.out.println("Server running...");
@@ -49,22 +50,24 @@ public class Server implements TCPConnectionListener {
     @Override
     public synchronized void onConnectionReady(TCPConnection tcpConnection) {
         connections.add(tcpConnection);
-        for(Player p : players)
-            tcpConnection.sendPlayer(p);
+        for(GameObject o : players)
+            tcpConnection.sendGameObject(o);
         //sendToAllClient("Client connected: " + tcpConnection);
 
         System.out.println(tcpConnection + " connected");
     }
 
     @Override
-    public void onReceivePlayer(TCPConnection tcpConnection, Player player) {
-        System.out.println("Receive player: " + player);
-        players.add(player);
+    public void onGameObjectReceive(TCPConnection tcpConnection, GameObject gameObject) {
+        if (gameObject instanceof  Player) {
+            System.out.println("Receive player: " + gameObject);
+            players.add(gameObject);
 
-        for(TCPConnection tcp : connections)
-            tcp.sendPlayer(player);
-
+            for (TCPConnection tcp : connections)
+                tcp.sendGameObject(gameObject);
+        }
     }
+
 
     @Override
     public synchronized void onDisconnect(TCPConnection tcpConnection) {

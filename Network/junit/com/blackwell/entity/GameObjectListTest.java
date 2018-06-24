@@ -3,15 +3,15 @@ package com.blackwell.entity;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class PlayerListTest {
+public class GameObjectListTest {
 
     @Test
     public void PlayersAddTest(){
         System.out.println("Players Add Test");
 
-        PlayerList list = new PlayerList();
-        Player p1 = new Player("log",10,10);
-        Player p2 = new Player("log",50,50);
+        GameObjectList list = new GameObjectList();
+        Player p1 = new Player(10,10,"log");
+        Player p2 = new Player(50,50,"log");
 
         System.out.println("p1: " + p1);
         System.out.println("p2: " + p2);
@@ -25,10 +25,10 @@ public class PlayerListTest {
         System.out.println("Adding p1 and p2 to list: " + list);
 
         int x_= 0, y_= 0;
-        for(Player p : list)
-            if ("log".equals(p.getLogin())){
-                x_ = p.getX();
-                y_ = p.getY();
+        for(GameObject o : list)
+            if ("log".equals(o.getLogin())){
+                x_ = o.getX();
+                y_ = o.getY();
             }
         Assert.assertEquals(x_, 50);
         Assert.assertEquals(y_, 50);

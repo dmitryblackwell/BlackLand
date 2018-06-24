@@ -1,7 +1,8 @@
 package com.blackwell;
 
+import com.blackwell.entity.GameObject;
 import com.blackwell.entity.Player;
-import com.blackwell.entity.PlayerList;
+import com.blackwell.entity.GameObjectList;
 
 import java.awt.*;
 import java.awt.event.KeyAdapter;
@@ -13,7 +14,7 @@ public class GamePlay extends Canvas implements Runnable, TCPConnectionListener{
 
     private TCPConnection connection;
     private Player hero = new Player();
-    private PlayerList players = new PlayerList();
+    private GameObjectList players = new GameObjectList();
 
     GamePlay(){
         addKeyListener(new KeyAdapter() {
@@ -52,7 +53,7 @@ public class GamePlay extends Canvas implements Runnable, TCPConnectionListener{
         players.add(hero);
         try {
             connection = new TCPConnection(this, "192.168.31.142", PORT);
-            connection.sendPlayer(hero);
+            connection.sendGameObject(hero);
             System.out.println("Connection created");
         } catch (IOException e) {
             e.printStackTrace();
@@ -62,9 +63,9 @@ public class GamePlay extends Canvas implements Runnable, TCPConnectionListener{
 
     private void drawPlayers(Graphics g){
         g.setColor(Color.BLACK);
-        for(Player p : players) {
-            g.fillRect(p.getX(), p.getY(), Player.SIZE, Player.SIZE);
-            p.tick();
+        for(GameObject o : players) {
+            g.fillRect(o.getX(), o.getY(), Player.SIZE, Player.SIZE);
+            o.tick();
         }
     }
 
@@ -86,7 +87,7 @@ public class GamePlay extends Canvas implements Runnable, TCPConnectionListener{
             drawPlayers(g);
 
 
-            connection.sendPlayer(hero);
+            connection.sendGameObject(hero);
 
             try {
                 Thread.sleep(10);
@@ -105,10 +106,10 @@ public class GamePlay extends Canvas implements Runnable, TCPConnectionListener{
     }
 
     @Override
-    public void onReceivePlayer(TCPConnection tcpConnection, Player p) {
-        if (!p.equals(hero)) {
-            System.out.println("Player " + p + " received");
-            players.add(p);
+    public void onGameObjectReceive(TCPConnection tcpConnection, GameObject gameObject) {
+        if ( gameObject instanceof Player && !gameObject.equals(hero)) {
+            System.out.println("Player " + gameObject + " received");
+            players.add(gameObject);
         }
     }
 
