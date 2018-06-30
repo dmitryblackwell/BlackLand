@@ -1,5 +1,6 @@
 package com.blackwell;
 
+import com.blackwell.entity.Bullet;
 import com.blackwell.entity.GameObject;
 import com.blackwell.entity.Player;
 import com.blackwell.entity.GameObjectList;
@@ -7,6 +8,8 @@ import com.blackwell.entity.GameObjectList;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferStrategy;
 import java.io.IOException;
 
@@ -15,6 +18,7 @@ public class GamePlay extends Canvas implements Runnable, TCPConnectionListener{
     private TCPConnection connection;
     private Player hero = new Player();
     private GameObjectList players = new GameObjectList();
+    private GameObjectList bullets = new GameObjectList();
 
     GamePlay(){
         addKeyListener(new KeyAdapter() {
@@ -46,13 +50,29 @@ public class GamePlay extends Canvas implements Runnable, TCPConnectionListener{
 
         });
 
+        addMouseListener(new MouseListener() {
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                Bullet bullet = new Bullet(hero.getX()+15, hero.getY()+15, e.getX(), e.getY());
+                bullets.add(bullet);
+            }
+
+
+            public void mouseEntered(MouseEvent e) {}
+            public void mouseExited(MouseEvent e) {}
+            public void mouseClicked(MouseEvent e) {}
+            public void mousePressed(MouseEvent e) {}
+        });
+
+
 
         requestFocus();
         new Window(this, hero.getLogin());
         (new Thread(this)).start();
         players.add(hero);
         try {
-            connection = new TCPConnection(this, "192.168.31.142", PORT);
+            connection = new TCPConnection(this, "192.168.100.51", PORT);
             connection.sendGameObject(hero);
             System.out.println("Connection created");
         } catch (IOException e) {
@@ -65,6 +85,14 @@ public class GamePlay extends Canvas implements Runnable, TCPConnectionListener{
         g.setColor(Color.BLACK);
         for(GameObject o : players) {
             g.fillRect(o.getX(), o.getY(), Player.SIZE, Player.SIZE);
+            o.tick();
+        }
+    }
+
+    private void drawBullets(Graphics g){
+        g.setColor(Color.pink);
+        for(GameObject o : bullets){
+            g.fillRect(o.getX(), o.getY(), Bullet.SIZE, Bullet.SIZE);
             o.tick();
         }
     }
@@ -85,9 +113,12 @@ public class GamePlay extends Canvas implements Runnable, TCPConnectionListener{
 
 
             drawPlayers(g);
+            drawBullets(g);
 
 
-            connection.sendGameObject(hero);
+            try {
+                connection.sendGameObject(hero);
+            }catch (NullPointerException e) {}
 
             try {
                 Thread.sleep(10);
