@@ -1,17 +1,22 @@
 package com.blackwell;
 
+import com.blackwell.entity.Bullet;
 import com.blackwell.entity.GameObject;
 import com.blackwell.entity.Player;
 import com.blackwell.entity.GameObjectList;
+import org.w3c.dom.css.Rect;
 
+import java.awt.*;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
+import java.util.Iterator;
 import java.util.List;
 
-public class Server implements TCPConnectionListener {
+public class Server extends Thread implements TCPConnectionListener {
 
     public static void main(String[] args) {
         // Getting your IP.
@@ -27,9 +32,44 @@ public class Server implements TCPConnectionListener {
 
     private final List<TCPConnection> connections = new ArrayList<>();
     private final GameObjectList players = new GameObjectList();
+    private final GameObjectList bullets = new GameObjectList();
+
+    @Override
+    public void run() {
+        while (true){
+            try {
+                Iterator<GameObject> it = bullets.iterator();
+                while (it.hasNext()) {
+                    GameObject bullet = it.next();
+                    for (TCPConnection tcpConnection : connections)
+                        tcpConnection.sendGameObject(bullet);
+
+                    bullet.tick();
+                    System.out.println("Send bullet " + bullet);
+
+                    if (bullet.getX() < -1000 || bullet.getX() > 5000 ||
+                            bullet.getY() < -1000 || bullet.getY() > 5000){
+                        System.out.println("Delete bullet " + bullet);
+                        it.remove();
+                    }
+
+                    for(GameObject p : players){
+                        Rectangle pRec = new Rectangle(p.getX(), p.getY(), Player.SIZE, Player.SIZE);
+                        Rectangle bRec = new Rectangle(bullet.getX(), bullet.getY(), Bullet.SIZE, Bullet.SIZE);
+                        if(pRec.intersects(bRec)){
+                            ((Player) p).setScore(((Player) p).getScore()-10);
+                        }
+
+                    }
+
+                }
+            }catch (ConcurrentModificationException e){}
+        }
+    }
 
     private Server(){
         System.out.println("Server running...");
+        start();
         try( ServerSocket serverSocket = new ServerSocket(PORT) ){
 
             while (true){
@@ -60,11 +100,15 @@ public class Server implements TCPConnectionListener {
     @Override
     public void onGameObjectReceive(TCPConnection tcpConnection, GameObject gameObject) {
         if (gameObject instanceof  Player) {
-            System.out.println("Receive player: " + gameObject);
+            //System.out.println("Receive player: " + gameObject);
             players.add(gameObject);
 
             for (TCPConnection tcp : connections)
                 tcp.sendGameObject(gameObject);
+        }
+        if (gameObject instanceof Bullet){
+            System.out.println("Receive bullet: " + gameObject);
+            bullets.add(gameObject);
         }
     }
 

@@ -1,9 +1,6 @@
 package com.blackwell;
 
-import com.blackwell.entity.Bullet;
-import com.blackwell.entity.GameObject;
-import com.blackwell.entity.Player;
-import com.blackwell.entity.GameObjectList;
+import com.blackwell.entity.*;
 
 import java.awt.*;
 import java.awt.event.KeyAdapter;
@@ -55,7 +52,8 @@ public class GamePlay extends Canvas implements Runnable, TCPConnectionListener{
             @Override
             public void mouseReleased(MouseEvent e) {
                 Bullet bullet = new Bullet(hero.getX()+15, hero.getY()+15, e.getX(), e.getY());
-                bullets.add(bullet);
+                System.out.println("Bullet " + bullet + " created");
+                connection.sendGameObject(bullet);
             }
 
 
@@ -115,6 +113,9 @@ public class GamePlay extends Canvas implements Runnable, TCPConnectionListener{
             drawPlayers(g);
             drawBullets(g);
 
+            g.setColor(Color.CYAN);
+            g.drawString(String.valueOf(hero.getScore()), 10,50);
+
 
             try {
                 connection.sendGameObject(hero);
@@ -138,10 +139,22 @@ public class GamePlay extends Canvas implements Runnable, TCPConnectionListener{
 
     @Override
     public void onGameObjectReceive(TCPConnection tcpConnection, GameObject gameObject) {
-        if ( gameObject instanceof Player && !gameObject.equals(hero)) {
-            System.out.println("Player " + gameObject + " received");
-            players.add(gameObject);
+        if ( gameObject instanceof Player) {
+            if(gameObject.equals(hero)){
+                hero.setScore(((Player) gameObject).getScore());
+            }else {
+                //System.out.println("Player " + gameObject + " received");
+                players.add(gameObject);
+            }
         }
+        if (gameObject instanceof Bullet){
+            //System.out.println("Bullet " + gameObject + " received");
+            bullets.add(gameObject);
+        }
+//        if (gameObject instanceof Gift){
+//            System.out.println("Gift " + gameObject + " received");
+//            score += ((Gift) gameObject).getSize();
+//        }
     }
 
     @Override

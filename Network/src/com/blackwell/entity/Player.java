@@ -6,6 +6,7 @@ import java.util.Random;
 public class Player extends GameObject{
     public static final int SIZE = 20;
     private int speed = 1;
+    private int score = 100;
 
     public Player(){
         super();
@@ -25,4 +26,11 @@ public class Player extends GameObject{
     public void stopX() { vX = 0; }
     public void stopY() { vY = 0; }
 
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
 }
