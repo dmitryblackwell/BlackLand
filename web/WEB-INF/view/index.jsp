@@ -40,8 +40,8 @@
   </div>
 
 
-  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-  <script src="<c:url value="/resources/scripts/fpsmeter.min.js"/>"></script>
+  <script src="<c:url value="/resources/libs/jquery.min.js"/>"></script>
+  <script src="<c:url value="/resources/libs/fpsmeter.min.js"/>"></script>
   <script src="<c:url value="/resources/scripts/platformer.js"/>"></script>
 
 </body>

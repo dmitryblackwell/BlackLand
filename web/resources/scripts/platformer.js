@@ -334,7 +334,7 @@
   document.addEventListener('keydown', function(ev) { return onkey(ev, ev.keyCode, true);  }, false);
   document.addEventListener('keyup',   function(ev) { return onkey(ev, ev.keyCode, false); }, false);
 
-  get("resources/scripts/level.json", function(req) {
+  get("resources/levels/default_level.json", function(req) {
     setup(JSON.parse(req.responseText));
     frame();
   });
