@@ -42,7 +42,12 @@
 
   <script src="<c:url value="/resources/libs/jquery.min.js"/>"></script>
   <script src="<c:url value="/resources/libs/fpsmeter.min.js"/>"></script>
-  <script src="<c:url value="/resources/scripts/platformer.js"/>"></script>
+
+  <script src="<c:url value="/resources/scripts/utils.js"/>"></script>
+  <script src="<c:url value="/resources/scripts/initialize.js"/>"></script>
+  <script src="<c:url value="/resources/scripts/loop_update.js"/>"></script>
+  <script src="<c:url value="/resources/scripts/rendering.js"/>"></script>
+  <script src="<c:url value="/resources/scripts/game_loop.js"/>"></script>
 
 </body>
 </html>
