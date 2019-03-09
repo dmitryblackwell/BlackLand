@@ -19,7 +19,7 @@ MAXDX    = 25,      // default max horizontal speed (15 tiles per second)
     ACCEL    = 1/2,     // default take 1/2 second to reach maxdx (horizontal acceleration)
     FRICTION = 1/6,     // default take 1/6 second to stop from maxdx (horizontal friction)
     IMPULSE  = 1500,    // default player jump impulse
-    COLOR    = { BLACK: '#000000', YELLOW: '#ECD078', BRICK: '#D95B43', PINK: '#C02942', PURPLE: '#542437', GREY: '#333', SLATE: '#53777A', GOLD: 'gold', BLUE: "blue" },
+    COLOR    = { BLACK: '#000000', YELLOW: '#ECD078', BRICK: '#D95B43', PINK: '#C02942', PURPLE: '#542437', GREY: '#333', SLATE: '#53777A', GOLD: 'gold', WHITE: "white", BLUE: "blue" },
     COLORS   = [ COLOR.YELLOW, COLOR.BRICK, COLOR.PINK, COLOR.PURPLE, COLOR.GREY ],
     KEY      = { SPACE: 32, LEFT: 37, UP: 38, RIGHT: 39, DOWN: 40, A: 65, D: 68, W: 87 };
 
@@ -27,8 +27,11 @@ var fps      = 60,
     step     = 1/fps,
     canvas   = document.getElementById('canvas'),
     ctx      = canvas.getContext('2d'),
-    width    = canvas.width  = MAP.tw * TILE,
-    height   = canvas.height = MAP.th * TILE,
+    bb       = canvas.getBoundingClientRect(),
+    offsetX  = bb.left,
+    offsetY  = bb.top,
+    width    = MAP.tw * TILE,
+    height   = MAP.th * TILE,
     player   = {},
     playerName= generateName(),
     players  = [],

@@ -1,39 +1,25 @@
 package com.blackwell.entity;
 
-public class Player {
-    private String name;
-    private float x, y;
+import java.util.Objects;
 
-    public Player(String name, float x, float y) {
-        this.name = name;
-        this.x = x;
-        this.y = y;
+public class Player extends AbstractGameEntity {
+    private String username;
+    private String hexColor;
+    private int health;
+    private int bullets;
+    private String id;
+
+    public Player(String id, float x, float y) {
+        super(x, y);
+        this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getId() {
+        return id;
     }
-
-    public void setName(String name) {
-        this.name = name;
+    public void setId(String id) {
+        this.id = id;
     }
-
-    public float getX() {
-        return x;
-    }
-
-    public void setX(float x) {
-        this.x = x;
-    }
-
-    public float getY() {
-        return y;
-    }
-
-    public void setY(float y) {
-        this.y = y;
-    }
-
 
     @Override
     public boolean equals(Object obj) {
@@ -41,20 +27,31 @@ public class Player {
             return true;
         if ( !(obj instanceof Player))
             return false;
-        return ((Player) obj).name.equals(this.name);
-    }
-
-    public void update(Player p){
-        this.x = p.getX();
-        this.y = p.getY();
+        return ((Player) obj).id.equals(this.id);
     }
 
     @Override
     public int hashCode() {
-        // TODO override his methods
-        return super.hashCode();
+        return Objects.hash(id);
     }
 
+    @Override
+    public void update(AbstractGameEntity gameEntity) {
+        super.update(gameEntity);
+        if (!(gameEntity instanceof Player))
+            return;
+        Player p = (Player) gameEntity;
+        this.health = p.health;
+        this.bullets = p.bullets;
+    }
 
-
+    @Override
+    public String toString() {
+        return "Player{" +
+                "username='" + username + '\'' +
+                ", id='" + id + '\'' +
+                ", x=" + x +
+                ", y=" + y +
+                '}';
+    }
 }

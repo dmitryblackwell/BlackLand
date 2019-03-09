@@ -19,6 +19,10 @@ function frame() {
 
 document.addEventListener('keydown', function(ev) { return onkey(ev, ev.keyCode, true);  }, false);
 document.addEventListener('keyup',   function(ev) { return onkey(ev, ev.keyCode, false); }, false);
+canvas.addEventListener("mouseup", function (evt) {
+    onMouseClick(evt);
+}, false);
+var bullets = [];
 
 get("resources/levels/default_level.json", function(req) {
     setup(JSON.parse(req.responseText));

@@ -2,25 +2,33 @@
 function render(ctx, frame, dt) {
     ctx.clearRect(0, 0, width, height);
     renderMap(ctx);
+    renderPlayers(ctx);
     renderPlayer(ctx, dt);
-    renderPlayers(ctx, dt);
+    renderBullets(ctx);
 }
 
 function renderPlayers(ctx) {
-    $.ajax({
-        url: "game/update",
-        data: {"x":player.x, "y":player.y, "name": playerName} ,
-        context: document.body,
-        success: function(data){
-            players = data;
-        }
-    });
-
+    playerUpdate();
     for(var i=0; i<players.length; ++i){
-        if (players[i].name !== playerName) {
+        if (players[i].id !== playerName) {
             ctx.fillStyle = COLOR.BLUE;
             ctx.fillRect(players[i].x, players[i].y, TILE, TILE);
         }
+    }
+}
+
+function renderBullets(ctx) {
+    $.ajax({
+        url: "game/get-bullets",
+        context: document.body,
+        success: function(data){
+            bullets = data;
+        }
+    });
+
+    ctx.fillStyle = COLOR.WHITE;
+    for(var i=0; i<bullets.length; ++i){
+        ctx.fillRect(bullets[i].x, bullets[i].y, TILE/4, TILE/4);
     }
 }
 
@@ -36,6 +44,8 @@ function renderMap(ctx) {
         }
     }
 }
+
+
 
 function renderPlayer(ctx, dt) {
     ctx.fillStyle = COLOR.YELLOW;

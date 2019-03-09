@@ -9,6 +9,16 @@ function onkey(ev, key, down) {
         case KEY.SPACE: player.jump  = down; ev.preventDefault(); return false;
     }
 }
+function onMouseClick(e) {
+    var speed = 15;
+    var dx = (e.x - player.x);
+    var dy = (e.y - player.y);
+    var mag = Math.sqrt(dx * dx + dy * dy);
+    var vX = (dx / mag) * speed;
+    var vY = (dy / mag) * speed;
+
+    shoot(vX, vY);
+}
 
 function update(dt) {
     updatePlayer(dt);
