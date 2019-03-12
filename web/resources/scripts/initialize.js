@@ -33,6 +33,7 @@ var fps      = 60,
     width    = MAP.tw * TILE,
     height   = MAP.th * TILE,
     player   = {},
+    health = 100;
     playerName= generateName(),
     players  = [],
     monsters = [],
@@ -78,6 +79,7 @@ function setupEntity(obj) {
     entity.monster  = obj.type == "monster";
     entity.player   = obj.type == "player";
     entity.treasure = obj.type == "treasure";
+    entity.player.health = obj.properties.health;
     entity.left     = obj.properties.left;
     entity.right    = obj.properties.right;
     entity.start    = { x: obj.x, y: obj.y }

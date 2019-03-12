@@ -12,7 +12,7 @@ function renderPlayers(ctx) {
     for(var i=0; i<players.length; ++i){
         if (players[i].id !== playerName) {
             ctx.fillStyle = COLOR.BLUE;
-            ctx.fillRect(players[i].x, players[i].y, TILE, TILE);
+            ctx.fillRect(players[i].x, players[i].y, TILE*(players[i].health/100), TILE*(players[i].health/100));
         }
     }
 }
@@ -49,7 +49,7 @@ function renderMap(ctx) {
 
 function renderPlayer(ctx, dt) {
     ctx.fillStyle = COLOR.YELLOW;
-    ctx.fillRect(player.x + (player.dx * dt), player.y + (player.dy * dt), TILE, TILE);
+    ctx.fillRect(player.x + (player.dx * dt), player.y + (player.dy * dt), TILE*(health/100), TILE*(health/100));
 
     var n, max;
 

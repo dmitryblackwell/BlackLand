@@ -20,7 +20,7 @@
           "name":"player",
           "properties":
           {
-
+            "health": 100
           },
           "type":"player",
           "visible":true,

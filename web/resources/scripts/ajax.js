@@ -12,7 +12,7 @@ function execute(cmd) {
 function playerUpdate() {
     $.ajax({
         url: "game/update",
-        data: {"x":player.x, "y":player.y, "id": playerName},
+        data: {"x":player.x, "y":player.y, "id": playerName, "health": health},
         context: document.body,
         success: function(data){
             players = data;

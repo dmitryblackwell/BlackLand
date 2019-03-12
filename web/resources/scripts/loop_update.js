@@ -122,3 +122,11 @@ function updateEntity(entity, dt) {
     entity.falling = ! (celldown || (nx && celldiag));
 
 }
+
+function checkCollision() {
+    for(var i=0; i<bullets.length; ++i) {
+        if (overlap(bullets[i].x, bullets[i].y, TILE/4, TILE/4,
+            player.x, player.y, TILE*(player.health/100), TILE*(player.health/100)))
+            health -= 10;
+    }
+}

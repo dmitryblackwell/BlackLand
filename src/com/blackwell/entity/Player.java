@@ -5,7 +5,7 @@ import java.util.Objects;
 public class Player extends AbstractGameEntity {
     private String username;
     private String hexColor;
-    private int health;
+    private int health = 100;
     private int bullets;
     private String id;
 
