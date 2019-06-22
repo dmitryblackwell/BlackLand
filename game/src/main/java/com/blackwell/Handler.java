@@ -1,12 +1,19 @@
 package com.blackwell;
 
+import com.blackwell.connection.GameService;
+import com.blackwell.connection.NetworkService;
+import com.blackwell.connection.PlayerDTO;
 import com.blackwell.entity.*;
+import retrofit2.Call;
+import sun.nio.ch.Net;
 
 import java.awt.*;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Random;
+import java.util.List;
 
 import static com.blackwell.Game.BG_COLOR;
 import static com.blackwell.Game.WIDTH;
@@ -17,6 +24,7 @@ public class Handler implements Iterable<GameObject> {
     private ArrayList<GameObject> toDelete = new ArrayList<>();
     private ArrayList<GameObject> toAdd = new ArrayList<>();
 
+    private GameService gameService;
 
     private static final int SPAWN_ENEMIES = 20;
     private static final int SPAWN_TIME = 20_000;
@@ -48,7 +56,12 @@ public class Handler implements Iterable<GameObject> {
         spawnTime = SPAWN_TIME;
         healthSpawn = 2f;
 
-        add(new Player(WIDTH/2,HEIGHT/2));
+
+        Player player = new Player(WIDTH/2,HEIGHT/2);
+        System.out.println("login: " + player.getLogin());
+        add(player);
+
+        gameService = NetworkService.getInstance().getGameService();
 
         ArrayList<Point> points;
 
@@ -142,6 +155,9 @@ public class Handler implements Iterable<GameObject> {
 
     synchronized void tick(){
         Player p = getPlayer();
+
+
+
 
         for(GameObject object : objects){
             object.tick();
@@ -297,7 +313,25 @@ public class Handler implements Iterable<GameObject> {
     boolean isPossibleShoot() { return health >= killAward; }
     boolean isPossibleBomb() { return health >= killAward*2; }
 
+    public void renderNewPlayers(Graphics g) {
+        try {
+            if (getPlayer() == null)
+                return;
+            List<PlayerDTO> otherPlayers = gameService.update(getPlayer()).execute().body();
+            // TODO fix null pointer
+            for(PlayerDTO playerDTO : otherPlayers) {
+                Player newPlayer = new Player(playerDTO.getX(), playerDTO.getY());
+                newPlayer.setLogin(playerDTO.getLogin());
+                newPlayer.render(g);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void render(Graphics g){
+        renderNewPlayers(g);
+
         try {
             for (GameObject object : objects) {
                 object.render(g);
@@ -336,7 +370,7 @@ public class Handler implements Iterable<GameObject> {
                 g.drawString(String.format("(+)%03d", health), getPlayer().getX() - 10, getPlayer().getY() - 70);
                 g.drawString(String.format("%02d:%02d", mins, secs), getPlayer().getX() - 10, getPlayer().getY() - 40);
             }
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
