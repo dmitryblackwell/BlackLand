@@ -1,6 +1,7 @@
 package com.blackwell;
 
 import com.blackwell.entity.*;
+import com.blackwell.handler.GameHandler;
 
 import javax.swing.*;
 import java.awt.event.KeyAdapter;
@@ -10,20 +11,20 @@ import java.awt.event.MouseListener;
 
 public class KeyInput extends KeyAdapter implements MouseListener {
 
-    private Handler handler;
+    private GameHandler gameHandler;
     private Window window;
 
-    KeyInput(Handler handler, Window window) {
-        this(handler);
+    KeyInput(GameHandler gameHandler, Window window) {
+        this(gameHandler);
         this.window = window;
     }
-    private KeyInput(Handler handler) {
-        this.handler = handler;
+    private KeyInput(GameHandler gameHandler) {
+        this.gameHandler = gameHandler;
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
-        Player p = handler.getPlayer();
+        Player p = gameHandler.getPlayer();
         switch (e.getKeyCode()){
             case KeyEvent.VK_W:
                 p.up(); break;
@@ -34,13 +35,13 @@ public class KeyInput extends KeyAdapter implements MouseListener {
             case KeyEvent.VK_D:
                 p.right(); break;
             case KeyEvent.VK_SHIFT:
-                handler.setDrawingGUI(true); break;
+                gameHandler.setDrawingGUI(true); break;
         }
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-        Player p = handler.getPlayer();
+        Player p = gameHandler.getPlayer();
         switch (e.getKeyCode()) {
             case KeyEvent.VK_W:
             case KeyEvent.VK_S:
@@ -56,29 +57,29 @@ public class KeyInput extends KeyAdapter implements MouseListener {
                     window.close();
                 break;
             case KeyEvent.VK_SHIFT:
-                handler.setDrawingGUI(false); break;
+                gameHandler.setDrawingGUI(false); break;
         }
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        Player p = handler.getPlayer();
+        Player p = gameHandler.getPlayer();
         switch (e.getButton()){
             case MouseEvent.BUTTON1:
-                if (handler.isPossibleShoot()) {
+                if (gameHandler.isPossibleShoot()) {
                     Bullet bullet = new Bullet(p.getX(), p.getY(), e.getX(), e.getY());
-                    handler.add(bullet);
-                    handler.bulletSpam();
+                    gameHandler.add(bullet);
+                    gameHandler.bulletSpam();
                 }
                 break;
             case MouseEvent.BUTTON3:
-                if(handler.isPossibleBomb()) {
+                if(gameHandler.isPossibleBomb()) {
                     // new bomb spawn
                     int shift = 8;
                     Bomb bomb = new Bomb(p.getX()-(p.getVelX()*shift),
                             p.getY()-(p.getVelY()*shift));
-                    handler.add(bomb);
-                    handler.bombSpam();
+                    gameHandler.add(bomb);
+                    gameHandler.bombSpam();
                 }
         }
     }

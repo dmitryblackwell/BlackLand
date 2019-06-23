@@ -16,6 +16,11 @@ public class Maze {
 
     public Maze() { backGeneration(); }
 
+
+    public ArrayList<Point> getPoints() {
+        return points;
+    }
+
     public void generate(){
         Point p = getFreePoint();
         Point n;
@@ -38,7 +43,7 @@ public class Maze {
     }
 
 
-    public void backGeneration(){
+    private void backGeneration(){
         while (getFreePointSize() > 500) {
             //System.out.println(getFreePointSize());
             Point p = getFreePoint();
@@ -114,10 +119,6 @@ public class Maze {
             vX = 0;
             vY = R.nextBoolean() ? -1 : 1;
         }
-    }
-
-    public ArrayList<Point> getPoints() {
-        return points;
     }
 
     private boolean isFreeSpaceExists(){

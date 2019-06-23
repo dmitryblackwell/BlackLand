@@ -19,7 +19,7 @@ public class Wall extends GameObject {
 
     @Override
     public int getSize() {
-        throw new UnsupportedOperationException();
+        return Block.SIZE;
     }
 
     public int getWith() {

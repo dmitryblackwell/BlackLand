@@ -1,5 +1,7 @@
 package com.blackwell;
 
+import com.blackwell.handler.GameHandler;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
@@ -8,7 +10,7 @@ import java.awt.image.BufferStrategy;
 public class Game extends Canvas implements Runnable {
     public static final int WIDTH;
     public static final int HEIGHT;
-    static final Color BG_COLOR = Color.BLACK;
+    public static final Color BG_COLOR = Color.BLACK;
 
     // screen init
     static {
@@ -20,13 +22,13 @@ public class Game extends Canvas implements Runnable {
 
     private Thread thread;
     private boolean running = false;
-    private Handler handler = new Handler();
+    private GameHandler gameHandler = new GameHandler();
 
     public static void main(String[] args) { new Game(); }
 
     private Game(){
         Window window = new Window(this);
-        KeyInput keyInput = new KeyInput(handler, window);
+        KeyInput keyInput = new KeyInput(gameHandler, window);
         this.addKeyListener(keyInput);
         this.addMouseListener(keyInput);
 
@@ -71,7 +73,7 @@ public class Game extends Canvas implements Runnable {
             if(System.currentTimeMillis() - timer > 1000){
                 timer += 1000;
                 //System.out.println("FPS: " + frames);
-                handler.setFPS(frames);
+                gameHandler.setFPS(frames);
                 frames = 0;
             }
         }
@@ -79,11 +81,10 @@ public class Game extends Canvas implements Runnable {
     }
 
     private void tick() {
-        handler.tick();
-        if(handler.getHealth() <= 0) {
+        gameHandler.tick();
+        if(gameHandler.getHealth() <= 0) {
             JOptionPane.showMessageDialog(null, "My Goodness, this is such a failure");
-            handler.init();
-            //stop();
+            gameHandler.init();
         }
     }
 
@@ -99,7 +100,7 @@ public class Game extends Canvas implements Runnable {
         g.setColor(BG_COLOR);
         g.fillRect(0,0,WIDTH,HEIGHT);
 
-        handler.render(g);
+        gameHandler.render(g);
 
         g.dispose();
         bs.show();
