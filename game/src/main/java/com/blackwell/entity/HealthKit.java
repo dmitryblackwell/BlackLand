@@ -8,7 +8,7 @@ public class HealthKit extends GameObject {
     public HealthKit(int x, int y) {
         super(x, y, ID.HealthKit);
     }
-    private ImageIcon icon = new ImageIcon("res/healthkit.png");
+    private ImageIcon icon = new ImageIcon(getClass().getResource("/healthkit.png"));
 
     @Override
     public void render(Graphics g) {

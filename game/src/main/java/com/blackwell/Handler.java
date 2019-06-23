@@ -9,6 +9,7 @@ import sun.nio.ch.Net;
 
 import java.awt.*;
 import java.io.IOException;
+import java.net.ConnectException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -186,7 +187,7 @@ public class Handler implements Iterable<GameObject> {
 
                 ////////////////////// Wall and Enemy/Player collision
                 if (object.getId() == ID.Wall){
-                    if((o.getId() == ID.BasicEnemy || o.getId() == ID.Player) &&
+                    if( (o.getId() == ID.Player || o.getId() == ID.BasicEnemy)&&
                             o.intersects(object.getBounds())){
 
                         if(object.contains(o.getX()+o.getSize()/2, o.getY() + o.getSize()))
@@ -313,24 +314,7 @@ public class Handler implements Iterable<GameObject> {
     boolean isPossibleShoot() { return health >= killAward; }
     boolean isPossibleBomb() { return health >= killAward*2; }
 
-    public void renderNewPlayers(Graphics g) {
-        try {
-            if (getPlayer() == null)
-                return;
-            List<PlayerDTO> otherPlayers = gameService.update(getPlayer()).execute().body();
-            // TODO fix null pointer
-            for(PlayerDTO playerDTO : otherPlayers) {
-                Player newPlayer = new Player(playerDTO.getX(), playerDTO.getY());
-                newPlayer.setLogin(playerDTO.getLogin());
-                newPlayer.render(g);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     public void render(Graphics g){
-        renderNewPlayers(g);
 
         try {
             for (GameObject object : objects) {

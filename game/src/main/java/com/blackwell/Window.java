@@ -18,7 +18,7 @@ class Window extends Canvas {
         frame.setLocationRelativeTo(null);
         frame.add(game);
 
-        ImageIcon icon = new ImageIcon("res/internet.png");
+        ImageIcon icon = new ImageIcon(getClass().getResource("/internet.png"));
         frame.setIconImage(icon.getImage());
 
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);

@@ -3,6 +3,9 @@ package com.blackwell.entity;
 import java.awt.*;
 
 public class BasicEnemy extends GameObject {
+
+    private int pX, pY;
+
     public BasicEnemy(int x, int y, ID id) {
         super(x, y, id);
         size /= 2;
@@ -13,6 +16,13 @@ public class BasicEnemy extends GameObject {
     public void render(Graphics g) {
         g.setColor(Color.RED);
         g.fillRect(x, y, size, size);
+    }
+
+
+    @Override
+    public void tick() {
+        super.tick();
+        moveTowards(pX, pY);
     }
 
     public void moveTowards(int x, int y){
@@ -36,5 +46,18 @@ public class BasicEnemy extends GameObject {
         else
             vY = 0;
     }
+
+    public void updatePlayerCoord(int x, int y){
+        this.pX = x;
+        this.pY = y;
+    }
+
+    public void swapPlayerCoord(){
+        int tmp = pX;
+        this.pX = pY;
+        this.pY = tmp;
+    }
+
+
 
 }
